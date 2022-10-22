@@ -1,0 +1,55 @@
+<!doctype html> 
+<html> 
+   <head> 
+      <meta charset="utf-8"> 
+      <title>WebAssembly Add Function</title>
+      <style>
+         div { 
+            font-size : 30px; text-align : center; color:orange; 
+         } 
+      </style>
+   </head>
+   <body>
+	<pre>
+#include <stdio.h>
+char *c_hello() {
+   return "Hello World";
+}
+	</pre>
+		emcc helloworld.c -s BINARYEN=1 -s SIDE_MODULE=1 -O3 -s "EXPORTED_FUNCTIONS=['_c_hello']"  -o helloworld.wasm
+		<a href="https://www.tutorialspoint.com/webassembly/webassembly_hello_world.htm" >hello</a>
+		<a href="https://haoningabc.iteye.com/admin/blogs/2510400" >iteye demo</a>
+		<a href="https://blog.csdn.net/teajs/article/details/78937865">old</a>
+      <div id="textcontent"></div>
+      <script> 
+		 const memory = new WebAssembly.Memory({ initial: 256, maximum: 256 });
+	     const importObj = {
+	         env: {
+	             abortStackOverflow: () => { throw new Error('overflow'); },
+	             table: new WebAssembly.Table({ initial: 0, maximum: 0, element: 'anyfunc' }),
+	             tableBase: 0,
+	             //memory: new WebAssembly.Memory({ initial: 256, maximum: 256 }),
+	             "memory": memory,
+	             "__memory_base": 1024,
+	             STACKTOP: 0,
+	             STACK_MAX: memory.buffer.byteLength,
+	         }
+	     };
+         fetch("helloworld.wasm")
+         .then(bytes => bytes.arrayBuffer())
+         .then(mod => WebAssembly.compile(mod))
+         //.then(module => {return new WebAssembly.Instance(module)})
+         .then(module => {return new WebAssembly.Instance(module,importObj)})
+         .then(instance => {   
+            console.log(instance); 
+            let buffer = new Uint8Array(importObj.env.memory.buffer); 
+            let test = instance.exports.c_hello(); 
+            let mytext = ""; 
+            for (let i=test; buffer[i]; i++) {
+               mytext += String.fromCharCode(buffer[i]);
+            }
+            console.log(mytext); document.getElementById("textcontent").innerHTML = mytext; 
+         });
+      </script>
+   </body>
+</html>
