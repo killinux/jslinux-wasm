@@ -42,6 +42,7 @@ char *c_hello() {
          .then(module => {return new WebAssembly.Instance(module,importObj)})
          .then(instance => {   
             console.log(instance); 
+			// from c  c_hello to env.memory.buffer
             let buffer = new Uint8Array(importObj.env.memory.buffer); 
             let test = instance.exports.c_hello(); 
             let mytext = ""; 

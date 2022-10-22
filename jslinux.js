@@ -522,15 +522,18 @@ function start_vm(user, pwd)
     }
 
     /* read the parameters */
-
+   console.log("hao---->jslinux"); 
     params = get_params();
     cpu = params["cpu"] || "riscv64";
     url = params["url"];
     if (!url) {
-        if (cpu == "x86")
+        if (cpu == "x86"){
+            console.log("hao:use root-x86.cfg ");
             url = "root-x86.cfg";
-        else
+        }else{
+            console.log("hao:use root-riscv64.cfg ");
             url = "root-riscv64.cfg";
+		}
     }
     url = get_absolute_url(url);
     mem_size = (params["mem"] | 0) || 128; /* in mb */
