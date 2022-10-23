@@ -5,9 +5,9 @@
 source /Users/bytedance/Desktop/code/emscripten/emsdk/emsdk_env.sh
 
 
-INPUT=hello.cpp
+#INPUT=hello.cpp
 #INPUT=hello1.cpp
-#INPUT=hello2.cpp
+INPUT=hello2.cpp
 OPTIMISATIONS=-O0
 #MEMORY=32*1024*1024
 MEMORY=33554432
